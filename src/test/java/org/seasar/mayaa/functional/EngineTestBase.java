@@ -76,6 +76,9 @@ public class EngineTestBase {
         FactoryFactory.setContext(servletContext);
 
         engine = ProviderUtil.getEngine();
+        // デフォルトのエラーハンドラを無効化して内部の例外でJUnitを失敗させる。
+        engine.setErrorHandler(null);
+
         // engine.setParameter(EngineImpl.DUMP_ENABLED, "true");
         // engine.setParameter(EngineImpl.PAGE_SERIALIZE, "true");
     }

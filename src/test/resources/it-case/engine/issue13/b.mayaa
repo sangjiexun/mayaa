@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<m:mayaa xmlns:m="http://mayaa.seasar.org" xmlns:r="http://maya.seasar.org/regression">
+
+  <m:beforeRender>
+    <![CDATA[
+    var value = java.time.LocalDateTime.now();
+  ]]>
+  </m:beforeRender>
+
+  <r:formatDateTest m:id="item" value="${value}" pattern="yyyy-MM-dd" />
+</m:mayaa>
