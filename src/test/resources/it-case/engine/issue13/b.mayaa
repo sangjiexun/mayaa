@@ -3,7 +3,7 @@
 
   <m:beforeRender>
     <![CDATA[
-    var value = java.time.LocalDateTime.now();
+    var value = java.time.LocalDateTime.of(2020, 7, 31, 12, 00);
   ]]>
   </m:beforeRender>
 

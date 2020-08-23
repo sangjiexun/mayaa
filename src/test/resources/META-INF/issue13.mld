@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE library PUBLIC "-//The Seasar Foundation//DTD Maya Library Definition 1.0//EN" "http://maya.seasar.org/dtd/mld_1_0.dtd">
 <library uri="http://maya.seasar.org/regression">
-    <processor name="formatDateTest" class="org.seasar.mayaa.regressions.issue13.FormatDateProcessor">
+    <processor name="formatDateTest" class="org.seasar.mayaa.regressions.issue13.FormatDateTestProcessor">
         <property name="value" required="true" expectedClass="java.time.LocalDateTime"/>
-        <!-- <property name="value" required="true" expectedClass="java.lang.String"/> -->
-        <property name="default" expectedClass="java.lang.String"/>
         <property name="pattern" expectedClass="java.lang.String"/>
     </processor>
 </library>

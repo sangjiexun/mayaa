@@ -1,8 +1,9 @@
 package org.seasar.mayaa.regressions.issue13;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import org.seasar.mayaa.cycle.ServiceCycle;
 import org.seasar.mayaa.engine.Page;
@@ -10,19 +11,17 @@ import org.seasar.mayaa.engine.processor.ProcessStatus;
 import org.seasar.mayaa.engine.processor.ProcessorProperty;
 import org.seasar.mayaa.impl.cycle.CycleUtil;
 import org.seasar.mayaa.impl.engine.processor.TemplateProcessorSupport;
-import org.seasar.mayaa.impl.util.DateFormatPool;
 
 /**
  * {@link java.util.Date}を指定フォーマットで文字列に変換して出力するプロセッサ。
  * 内部的には{@link SimpleDateFormat}。
  *
  */
-public class FormatDateProcessor extends TemplateProcessorSupport {
+public class FormatDateTestProcessor extends TemplateProcessorSupport {
 
     private static final long serialVersionUID = -2331626109260967664L;
 
-    private LocalDateTime value;
-    private ProcessorProperty _default;
+    private ProcessorProperty _value;
     private String _pattern;
 
     public void initialize() {
@@ -31,21 +30,12 @@ public class FormatDateProcessor extends TemplateProcessorSupport {
         }
     }
 
-    // MLD property, expectedClass=java.lang.String
-    // public void setValue(ProcessorProperty value) {
-    //     _value = value;
-    // }
-
-    public void setValue(LocalDateTime value) {
-        this.value = value;
+    public void setValue(ProcessorProperty value) {
+        this._value = value;
     }
 
-    public LocalDateTime getValue() {
-        return value;
-    }
-
-    public void setDefault(ProcessorProperty defaultValue) {
-        _default = defaultValue;
+    public ProcessorProperty getValue() {
+        return _value;
     }
 
     public void setPattern(String pattern) {
@@ -53,12 +43,27 @@ public class FormatDateProcessor extends TemplateProcessorSupport {
     }
 
     public ProcessStatus doStartProcess(Page topLevelPage) {
-        if (value != null) {
-            DateFormat formatter = DateFormatPool.borrowFormat(_pattern);
+        if (_value != null) {
             ServiceCycle cycle = CycleUtil.getServiceCycle();
-            cycle.getResponse().write(formatter.format(value));
-            DateFormatPool.returnFormat(formatter);
+            cycle.getResponse().write(format(_value));
         }
         return ProcessStatus.SKIP_BODY;
     }
+
+    private String format(ProcessorProperty property) {
+        Object result = property.getValue().execute(null);
+        if (result != null) {
+            if (result instanceof LocalDateTime) {
+                LocalDateTime date = (LocalDateTime) result;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(_pattern);
+                String formattedValue = date.format(formatter);
+                return formattedValue;
+            }
+
+            throw new IllegalArgumentException(
+                    "argument type mismatch: " + result.getClass().getName());
+        }
+        return "";
+    }
+
 }
